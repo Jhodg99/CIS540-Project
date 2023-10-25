@@ -17,7 +17,7 @@ def query_google_trend(trendType):
     soup = BeautifulSoup(r.text, 'html.parser')
 
     news_lis = soup.find_all("li", {"class": "c-posts__item c-posts__loadmore"})
-    fileName = trendType + "/" + trendType + "_" + str(date.today()) + ".txt"
+    fileName = "../" + trendType + "/" + trendType + "_" + str(date.today()) + ".txt"
     driveName = trendType + "_" + str(date.today()) + ".txt"
     f = open(fileName, "w")
     for li in news_lis:
