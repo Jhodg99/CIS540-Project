@@ -2,7 +2,6 @@ from datetime import datetime, timedelta, date
 from bs4 import BeautifulSoup
 import requests
 import time
-import mysql.connector
 import re
 import os 
 from pydrive.drive import GoogleDrive 
@@ -40,6 +39,10 @@ def query_google_trend(trendType):
             file_metadata = {'title': driveName, "parents": [{"id": "1_NeZVtES6BnUVDZD0YpsgPylAoWb-A1Y"}]}
         elif trendType == "sports":
             file_metadata = {'title': driveName, "parents": [{"id": "1ZUXN6xwX-890rkPVqDNnlHQHLz6nL8So"}]}
+        elif trendType == "health":
+            file_metadata = {'title': driveName, "parents": [{"id": "1XWcZ6Hji2d1kMI57SleuKRBBA-Ia71x4"}]}
+        elif trendType == "world":
+            file_metadata = {'title': driveName, "parents": [{"id": "1GnxGg8tmtADMZZSIv3HxI4ZhpUKucISX"}]}
         else:
             file_metadata = {'title': driveName, "parents": [{"id": "1DiVwsXoLPmXbRILLrLlk5QNmokpk_GEZ"}]}
         f = drive.CreateFile(file_metadata) 
@@ -60,7 +63,9 @@ if __name__ == '__main__':
 
     #trendType = "politics"
     #trendType = "entertainment"
-    trendType = "sports"
+    #trendType = "world"
+    trendType = "health"
+    #trendType = "sports"
 
     # replace the value of this variable 
     # with the absolute path of the directory 
