@@ -64,26 +64,28 @@ if __name__ == '__main__':
     #trendType = "politics"
     #trendType = "entertainment"
     #trendType = "world"
-    trendType = "health"
+    #trendType = "health"
     #trendType = "sports"
+    topics = ["politics", "entertainment", "world", "health", "sports"]
 
-    # replace the value of this variable 
-    # with the absolute path of the directory 
-    path = "C:\\Users\\Jake\\Documents\\CIS540Project\\" + trendType
+    for i in topics:
+        # replace the value of this variable 
+        # with the absolute path of the directory 
+        path = "C:\\Users\\Jake\\Documents\\CIS540Project\\" + i
+        
+        try:
+            query_google_trend(i) 
     
-    try:
-        query_google_trend(trendType) 
-  
-    # except is for handling the errors
-    except requests.exceptions.Timeout:
-        # Maybe set up for a retry, or continue in a retry loop
-        print('request time out')
-        input()
-    except requests.exceptions.TooManyRedirects:
-        # Tell the user their URL was bad and try a different one
-        print('too many redirect')
-        input()
-    except requests.exceptions.RequestException as e:
-        # catastrophic error. bail.
-        print('request unknown error')
-        input()
+        # except is for handling the errors
+        except requests.exceptions.Timeout:
+            # Maybe set up for a retry, or continue in a retry loop
+            print('request time out')
+            input()
+        except requests.exceptions.TooManyRedirects:
+            # Tell the user their URL was bad and try a different one
+            print('too many redirect')
+            input()
+        except requests.exceptions.RequestException as e:
+            # catastrophic error. bail.
+            print('request unknown error')
+            input()
