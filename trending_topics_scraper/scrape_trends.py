@@ -32,22 +32,22 @@ def query_google_trend(trendType):
     path = "C:\\Users\\Jake\\Documents\\CIS540Project\\" + trendType
     # iterating thought all the files/folder 
     # of the desired directory 
-    for x in os.listdir(path): 
-        if trendType == "politics":
-            file_metadata = {'title': driveName, "parents": [{"id": "1ONnvQTuXi5MsS-gX6S4eqOzxDKtlLdhD"}]}
-        elif trendType == "entertainment":
-            file_metadata = {'title': driveName, "parents": [{"id": "1_NeZVtES6BnUVDZD0YpsgPylAoWb-A1Y"}]}
-        elif trendType == "sports":
-            file_metadata = {'title': driveName, "parents": [{"id": "1ZUXN6xwX-890rkPVqDNnlHQHLz6nL8So"}]}
-        elif trendType == "health":
-            file_metadata = {'title': driveName, "parents": [{"id": "1XWcZ6Hji2d1kMI57SleuKRBBA-Ia71x4"}]}
-        elif trendType == "world":
-            file_metadata = {'title': driveName, "parents": [{"id": "1GnxGg8tmtADMZZSIv3HxI4ZhpUKucISX"}]}
-        else:
-            file_metadata = {'title': driveName, "parents": [{"id": "1DiVwsXoLPmXbRILLrLlk5QNmokpk_GEZ"}]}
-        f = drive.CreateFile(file_metadata) 
-        f.SetContentFile(os.path.join(path, x)) 
-        f.Upload() 
+    if trendType == "politics":
+        file_metadata = {'title': driveName, "parents": [{"id": "1ONnvQTuXi5MsS-gX6S4eqOzxDKtlLdhD"}]}
+    elif trendType == "entertainment":
+        file_metadata = {'title': driveName, "parents": [{"id": "1_NeZVtES6BnUVDZD0YpsgPylAoWb-A1Y"}]}
+    elif trendType == "sports":
+        file_metadata = {'title': driveName, "parents": [{"id": "1ZUXN6xwX-890rkPVqDNnlHQHLz6nL8So"}]}
+    elif trendType == "health":
+        file_metadata = {'title': driveName, "parents": [{"id": "1XWcZ6Hji2d1kMI57SleuKRBBA-Ia71x4"}]}
+    elif trendType == "world":
+        file_metadata = {'title': driveName, "parents": [{"id": "1GnxGg8tmtADMZZSIv3HxI4ZhpUKucISX"}]}
+    else:
+        file_metadata = {'title': driveName, "parents": [{"id": "1DiVwsXoLPmXbRILLrLlk5QNmokpk_GEZ"}]}
+    f = drive.CreateFile(file_metadata) 
+    relativeFileName = trendType + "_" + str(date.today()) + ".txt"
+    f.SetContentFile(os.path.join(path, relativeFileName)) 
+    f.Upload() 
 
     return
 
