@@ -1,0 +1,35 @@
+import requests
+import json
+import sys
+
+
+apikey = "4d8186d5f33938ebf6f639a630d56da64ac57c93c6c2d6c6f57d870dfdd5ccae"
+base_url = "https://www.virustotal.com/api/v3/urls"
+analysis_url = "https://www.virustotal.com/api/v3/analyses/"
+urls_to_scan = ["https://www.w3schools.com/sql/sql_insert.asp"]
+
+
+def scan_url (api_key, urls_to_scan, base_url, analysis_url):
+
+    for url in urls_to_scan:
+        payload = { "url": url }
+        headers = {
+            "accept": "application/json",
+            "x-apikey": apikey,
+            "content-type": "application/x-www-form-urlencoded"
+        }
+        response = requests.post(base_url, data=payload, headers=headers)
+        scan_json = json.loads(response.text)
+        url_id = scan_json['data']['id']
+        
+        analysis_headers = {
+            "accept": "application/json",
+            "x-apikey": api_key
+        }
+        analysis_url_and_id = analysis_url + url_id
+        analysis_response = requests.get(analysis_url_and_id, headers=analysis_headers)
+        print(analysis_response.text)
+
+
+scan_url(apikey, urls_to_scan, base_url, analysis_url)
+
