@@ -1,5 +1,5 @@
 Scrape_Trends is a Python program which scrapes global news stories from a reputable news website. 
-Scrape_Twitter_Trends is a Python program which scrapers trending hashtag and keywords off the popular social media site X (Twitter)
+Scrape_Twitter_Trends is a Python program which scrapers trending hashtag and keywords off the popular social media site X (Twitter). This is done for both the USA and Worldwide trends.
 
 Each day these two programs automatically run using a Windows Batch File. The BeautifulSoup library to send a get request to each of the two websites trending topic pages to get the trending stories/keywords/hashtags for the day. Upon gathering these stories, it stores them in a local text files to be further processed by the Google Auth Api.
 Once these text files are gathered, using Google's Authentication API we can upload these files to a shared Project Google Drive to be processed later by other programs.
