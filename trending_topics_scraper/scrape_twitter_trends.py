@@ -8,16 +8,24 @@ from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth 
 
 # C:\Users\Jake\AppData\Local\Programs\Python\Python37\python.exe
-def query_twitter_trend():
+def query_twitter_trend(topic):
     headers={'User-Agent': 'Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Mobile/7B405'}
-    base_url = 'https://trends24.in/united-states/'
+    if topic == "USA":
+        base_url = 'https://trends24.in/united-states/'
+        driveName = "twitter_USA_" + str(date.today()) + ".txt"
+        relativeFileName =  "twitter_USA_" + str(date.today()) + ".txt"
+        fileName = "../twitter" + "/twitter" + "_USA_" + str(date.today()) + ".txt"
+    else:
+        base_url = 'https://trends24.in'
+        driveName = "twitter_" + str(date.today()) + ".txt"
+        relativeFileName =  "twitter_" + str(date.today()) + ".txt"
+        fileName = "../twitter" + "/twitter" + "_" + str(date.today()) + ".txt"
+
     # getting the url
     r = requests.get(base_url, headers=headers)
     soup = BeautifulSoup(r.text, 'html.parser')
 
     news_lis = soup.find_all("div", {"class": "trend-card"})
-    fileName = "../twitter" + "/twitter" + "_" + str(date.today()) + ".txt"
-    driveName = "twitter_USA_" + str(date.today()) + ".txt"
     f = open(fileName, "w", encoding="utf-8")
     for div in news_lis:
         for li in div.find_all('li'):
@@ -41,7 +49,6 @@ def query_twitter_trend():
     # of the desired directory 
     file_metadata = {'title': driveName, "parents": [{"id": "1_-nIQobagdwVCv88ehtoWx8gKsedJ02C"}]}
     f = drive.CreateFile(file_metadata) 
-    relativeFileName =  "twitter_" + str(date.today()) + ".txt"
     f.SetContentFile(os.path.join(path, relativeFileName)) 
     f.Upload() 
 
@@ -59,21 +66,25 @@ if __name__ == '__main__':
 
     # replace the value of this variable 
     # with the absolute path of the directory 
-    path = "C:\\Users\\Jake\\Documents\\CIS540Project\\twitter"
-    
-    try:
-        query_twitter_trend() 
 
-    # except is for handling the errors
-    except requests.exceptions.Timeout:
-        # Maybe set up for a retry, or continue in a retry loop
-        print('request time out')
-        input()
-    except requests.exceptions.TooManyRedirects:
-        # Tell the user their URL was bad and try a different one
-        print('too many redirect')
-        input()
-    except requests.exceptions.RequestException as e:
-        # catastrophic error. bail.
-        print('request unknown error')
-        input()
+    topics = ["USA", "World"]
+
+    for i in topics:
+        path = "C:\\Users\\Jake\\Documents\\CIS540Project\\" + i
+        
+        try:
+            query_twitter_trend(i) 
+
+        # except is for handling the errors
+        except requests.exceptions.Timeout:
+            # Maybe set up for a retry, or continue in a retry loop
+            print('request time out')
+            input()
+        except requests.exceptions.TooManyRedirects:
+            # Tell the user their URL was bad and try a different one
+            print('too many redirect')
+            input()
+        except requests.exceptions.RequestException as e:
+            # catastrophic error. bail.
+            print('request unknown error')
+            input()
