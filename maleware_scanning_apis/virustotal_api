@@ -7,8 +7,6 @@ import time
 apikey = "4d8186d5f33938ebf6f639a630d56da64ac57c93c6c2d6c6f57d870dfdd5ccae"
 base_url = "https://www.virustotal.com/api/v3/urls"
 analysis_url = "https://www.virustotal.com/api/v3/analyses/"
-urls_to_scan = ["http://42.225.205.210:56879/i"]
-
 results_list = []
 
 def scan_url (api_key, urls_to_scan, base_api_url, analysis_api_url):
@@ -47,8 +45,8 @@ def scan_url (api_key, urls_to_scan, base_api_url, analysis_api_url):
                         "undetected" : scan_response_json['data']['attributes']['stats']['undetected'],
                         "timeout" : scan_response_json['data']['attributes']['stats']['timeout']
                         }
-        print(analysis_response.text)
         results_list.append(results_dict)
+        time.sleep(30)
 
 
 def get_scan_methods(json_object):
@@ -88,7 +86,26 @@ def analysis_api(api_key, url_id, analysis_api_url, query_flag=False):
         analysis_response = requests.get(analysis_url_and_id, headers=analysis_headers)
         return analysis_response
 
+def read_search_results(text_file):
+    url_list = []
+
+    with open(text_file, 'r') as file:
+        file_content = file.readlines()
+
+    for url in file_content:
+        url_list.append(url.strip())
+
+    return url_list
 
 
-scan_url(apikey, urls_to_scan, base_url, analysis_url)
-print(results_list)
+
+#====================================================#
+if __name__ == '__main__':
+    urls_to_scan = read_search_results('google_search_results_2023_11_13.txt')
+
+    scan_url(apikey, urls_to_scan, base_url, analysis_url)
+
+    file = open('virustotal_results.txt','w')
+    for result in results_list:
+        file.write(result+"\n")
+    file.close()
