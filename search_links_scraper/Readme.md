@@ -12,23 +12,15 @@
 ---
 - Uses the Bing Search v7 API to fetch web links using the keywords extracted by the Keyword Extraction Function
 - The API pulls 10 web links per search keyword
-- Targets the english language from: US, UK, Canada, EU, Australia regions
+- Targets the english language from: US, UK, Korea, China, Russia regions
 - Outputs the web links to a file
 ---
 
 ### _Google Search Function_
 ---
 - Uses the Google Search library to fetch web links using the keywords extracted by the Keyword Extraction Function
-- The API pulls 10 web links per search keyword
-- Targets the english language from: US, UK, Canada, EU, Australia regions
-- Outputs the web links to a file
----
-
-### _DuckDuckGo Search Function_
----
-- Uses the DuckDuckGo Search library to fetch web links using the keywords extracted by the Keyword Extraction Function
-- The API pulls 10 web links per search keyword
-- Targets the english language from: US, UK, Canada, EU, Australia regions
+- The API pulls 5 web links per search keyword
+- Targets the english language from: US, UK, Israel, China, Russia
 - Outputs the web links to a file
 ---
 
