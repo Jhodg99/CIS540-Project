@@ -1,0 +1,73 @@
+import requests
+import json
+import sys
+import time
+#HybAnalysis API key
+api_key = 'o7vw5npxe121c8b6p2pd1w28b8e2283b4xhv20887303626b1rrhh4ux915c7d13'
+quick_scan_url = 'https://www.hybrid-analysis.com/api/v2/quick-scan/url'
+results_list = []
+
+def scan_url(api_key, quickscan_url, urls_to_scan):
+
+    for url in urls_to_scan:
+        
+        #Scan for the url id
+        id_response = run_quick_scan(api_key, quick_scan_url, url)
+        scan_json = json.loads(id_response.text)
+
+        #All of the scans don't all happen consistenly, so I can go through and add checks on whether or not they exist.
+        #As of now it won't work, because sometimes 'status' returns as NoneType
+        results_dict = {"scanned_url" : url, 
+            "Crowdstrike_ML" : scan_json['scanners_v2']['crowdstrike_ml']['status'],
+            "MetaDefender" : scan_json['scanners_v2']['metadefender']['status'],
+            "VirusTotal" : scan_json['scanners_v2']['virustotal']['status'],
+            "urlscan_io" : scan_json['scanners_v2']['urlscan_io']['status'],
+            "Scam_Adviser" : scan_json['scanners_v2']['scam_adviser']['status'],
+            "Clean_DNS" : scan_json['scanners_v2']['clean_dns']['status'],
+            "Bfore_AI" : scan_json['scanners_v2']['bfore_ai']['status']
+            }
+        results_list.append(results_dict)
+
+
+
+def run_quick_scan(api_key, quickscan_url, url_to_scan):
+
+    headers = {
+        'accept': 'application/json',
+        'api-key': api_key,
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    data = {
+        'scan_type': 'all',
+        'url': url_to_scan,
+        'no_share_third_party': '',
+        'allow_community_access': '',
+        'comment': '',
+        'submit_name': ''
+    }
+    response = requests.post(quickscan_url, headers=headers, data=data)
+    return response
+
+
+
+def read_search_results(text_file):
+    url_list = []
+
+    with open(text_file, 'r') as file:
+        file_content = file.readlines()
+
+    for url in file_content:
+        url_list.append(url.strip())
+
+    return url_list
+
+
+
+#====================================================#
+if __name__ == '__main__':
+    #urls_to_scan = read_search_results('google_search_results_2023_11_13.txt')
+    urls_to_scan = ['https://urlhaus.abuse.ch/url/2733586/']
+    scan_url(api_key, quick_scan_url, urls_to_scan)
+    file = open('hybrid_analysis.txt','a')
+    json.dump(results_list, file, indent=2)
+    file.close()
