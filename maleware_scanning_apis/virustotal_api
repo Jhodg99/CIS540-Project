@@ -24,7 +24,7 @@ def scan_url (api_key, urls_to_scan, base_api_url, analysis_api_url):
 
         #Queries the url analysis
         analysis_api(api_key, url_id, analysis_api_url, True)
-        time.sleep(10)
+        time.sleep(30)
         #Gets the url analysis object back
         #This is the nature of the api, i'm sure there's a way around this, but this is how i'm doing that
         analysis_response = analysis_api(api_key, url_id, analysis_api_url)
@@ -87,6 +87,7 @@ def analysis_api(api_key, url_id, analysis_api_url, query_flag=False):
         print("Querying url...")
         return
     else:
+        print("Getting analysis results...")
         analysis_headers = {
                 "accept": "application/json",
                 "x-apikey": api_key
@@ -110,12 +111,12 @@ def read_search_results(text_file):
 
 #====================================================#
 if __name__ == '__main__':
-    urls_to_scan = read_search_results('google_search_results_2023_11_13.txt')
+    urls_to_scan = read_search_results('bing_US_health_results.txt')
     number_of_urls = len(urls_to_scan)
 
     num_mal, num_safe = scan_url(apikey, urls_to_scan, base_url, analysis_url)
 
-    file = open('virustotal_results.txt','a')
+    file = open('bing_health_results.txt','a')
     file.write(f"Out of {number_of_urls} urls scanned: {num_mal} were found to be malicious, {num_safe} were found to be safe")
     json.dump(results_list, file, indent=2)
     file.close()
