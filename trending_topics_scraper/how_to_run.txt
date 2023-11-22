@@ -1,0 +1,28 @@
+﻿1. Must have 
+   1. Using Python
+      1. Install Python 3.0+
+         1. https://realpython.com/installing-python/
+      2. Have BeautifulSoup and Pydrive Installed
+         1. Pip install pydrive
+         2. Pip install bs4 (could be another name)
+         3. https://packaging.python.org/en/latest/tutorials/installing-packages/#use-pip-for-installing
+   2. Making Google Drive Work (NOT REQUIRED FOR LOCAL USE, ONLY IF YOU WANT TO UPLOAD FILES TO THE DRIVE)
+      1. https://www.projectpro.io/recipes/upload-files-to-google-drive-using-python
+      2. You have to create a client_secrets.json (use the link below, also linked in the doc above)
+         1. https://d35mpxyw7m7k7g.cloudfront.net/bigdata_1/Get+Authentication+for+Google+Service+API+.pdf
+   3. If you do not want to use google drive
+      1. Remove lines
+         1.     gauth = GoogleAuth()
+         2.     gauth.LocalWebserverAuth()        
+         3.     drive = GoogleDrive(gauth)
+         4. All lines below f.close() (line 28)
+   4. Scraping a certain topic (Not The Twitter Scraper)
+      1. Replace trendType (line 62) with the topic you want to scrape off of https://globalnews.ca/money/
+         1. For example: 
+            1. trendType = “money”
+         2. Topic must match one of the links on the top of the page (money, health, lifestyle, etc…)
+   5. Run the program
+      1. Python ./scrape_trends.py
+      2. Python ./scrape_twitter_trends.py
+      3. (if not working, try python –version, and make sure you have correctly set up your environment variables 
+      4. https://www.tutorialspoint.com/how-to-set-python-environment-variable-pythonpath-on-windows#:~:text=Here's%20how%20%E2%88%92-,Open%20the%20Start%20menu%20and%20search%20for%20%22Environment%20Variables%22.,add%20a%20new%20environment%20variable.
