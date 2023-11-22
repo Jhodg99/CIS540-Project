@@ -9,8 +9,11 @@ base_url = "https://www.virustotal.com/api/v3/urls"
 analysis_url = "https://www.virustotal.com/api/v3/analyses/"
 results_list = []
 
+
 def scan_url (api_key, urls_to_scan, base_api_url, analysis_api_url):
 
+    num_potentially_malicious = 0
+    num_safe = 0
     for url in urls_to_scan:
         
         #Scan for the url id
@@ -31,9 +34,11 @@ def scan_url (api_key, urls_to_scan, base_api_url, analysis_api_url):
         mal_list = []
         sus_list = []
         if scan_response_json['data']['attributes']['stats']['malicious'] > 0 or scan_response_json['data']['attributes']['stats']['suspicious'] > 0:
+            num_potentially_malicious += 1
             mal_list, sus_list = get_scan_methods(scan_response_json)
             print(f"Scans found {url} to be bad according to mal_list:{mal_list} and sus_list{sus_list}")
         else:
+            num_safe += 1
             print(f"Scans found no malicious or suspicious flags for {url}")
 
         #time.sleep(25)
@@ -49,6 +54,8 @@ def scan_url (api_key, urls_to_scan, base_api_url, analysis_api_url):
         results_list.append(results_dict)
         print(results_list)
         time.sleep(60)
+
+    return num_potentially_malicious, num_safe
 
 
 def get_scan_methods(json_object):
@@ -104,8 +111,11 @@ def read_search_results(text_file):
 #====================================================#
 if __name__ == '__main__':
     urls_to_scan = read_search_results('google_search_results_2023_11_13.txt')
+    number_of_urls = len(urls_to_scan)
 
-    scan_url(apikey, urls_to_scan, base_url, analysis_url)
-    file = open('virus_total.txt','a')
+    num_mal, num_safe = scan_url(apikey, urls_to_scan, base_url, analysis_url)
+
+    file = open('virustotal_results.txt','a')
+    file.write(f"Out of {number_of_urls} urls scanned: {num_mal} were found to be malicious, {num_safe} were found to be safe")
     json.dump(results_list, file, indent=2)
     file.close()
