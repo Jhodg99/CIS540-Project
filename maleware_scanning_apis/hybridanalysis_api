@@ -5,26 +5,110 @@ import time
 #HybAnalysis API key
 api_key = 'o7vw5npxe121c8b6p2pd1w28b8e2283b4xhv20887303626b1rrhh4ux915c7d13'
 quick_scan_url = 'https://www.hybrid-analysis.com/api/v2/quick-scan/url'
+needs_to_finish_url = 'https://www.hybrid-analysis.com/api/v2/quick-scan/'
 results_list = []
 
-def scan_url(api_key, quickscan_url, urls_to_scan):
+def scan_url(api_key, quickscan_url, urls_to_sca, needs_to_finish_url):
 
     for url in urls_to_scan:
         
         #Scan for the url id
         id_response = run_quick_scan(api_key, quick_scan_url, url)
         scan_json = json.loads(id_response.text)
+        print(scan_json)
 
-        #All of the scans don't all happen consistenly, so I can go through and add checks on whether or not they exist.
-        #As of now it won't work, because sometimes 'status' returns as NoneType
+        #This is ugly, but oh well
+        if scan_json['scanners_v2']['crowdstrike_ml'] is None:
+            CS_ML_Result = "Not Scanned"
+        else:
+            CS_ML_Result = scan_json['scanners_v2']['crowdstrike_ml']['status']
+
+        if scan_json['scanners_v2']['metadefender'] is None:
+            MD_Result = "Not Scanned"
+        else:
+            MD_Result = scan_json['scanners_v2']['metadefender']['status']
+
+        if scan_json['scanners_v2']['virustotal'] is None:
+            VT_Result = "Not Scanned"
+        else:
+            VT_Result = scan_json['scanners_v2']['virustotal']['status']
+
+        if scan_json['scanners_v2']['urlscan_io'] is None:
+            URL_IO_Result = "Not Scanned"
+        else:
+            URL_IO_Result = scan_json['scanners_v2']['urlscan_io']['status']
+
+        if scan_json['scanners_v2']['scam_adviser'] is None:
+            SA_Result = "Not Scanned"
+        else:
+            SA_Result = scan_json['scanners_v2']['scam_adviser']['status']
+            
+        if scan_json['scanners_v2']['clean_dns'] is None:
+            CD_Result = "Not Scanned"
+        else:
+            CD_Result = scan_json['scanners_v2']['clean_dns']['status']
+
+        if scan_json['scanners_v2']['bfore_ai'] is None:
+            BA_Result = "Not Scanned"
+        else:
+            BA_Result = scan_json['scanners_v2']['bfore_ai']['status']
+
+
+        if scan_json['finished'] == False:
+            time.sleep(10)
+            url_scan_id = scan_json ['id']
+            url_to_finish = needs_to_finish_url + url_scan_id
+            headers = {
+                'accept': 'application/json',
+                'api-key': api_key
+            }
+            finished_response = requests.get(url_to_finish, headers=headers)
+            
+            scan_json_finished = json.loads(finished_response.text)
+
+            if scan_json_finished['scanners_v2']['crowdstrike_ml'] is None:
+                CS_ML_Result = "Not Scanned"
+            else:
+                CS_ML_Result = scan_json_finished['scanners_v2']['crowdstrike_ml']['status']
+
+            if scan_json_finished['scanners_v2']['metadefender'] is None:
+                MD_Result = "Not Scanned"
+            else:
+                MD_Result = scan_json_finished['scanners_v2']['metadefender']['status']
+
+            if scan_json_finished['scanners_v2']['virustotal'] is None:
+                VT_Result = "Not Scanned"
+            else:
+                VT_Result = scan_json_finished['scanners_v2']['virustotal']['status']
+
+            if scan_json_finished['scanners_v2']['urlscan_io'] is None:
+                URL_IO_Result = "Not Scanned"
+            else:
+                URL_IO_Result = scan_json_finished['scanners_v2']['urlscan_io']['status']
+
+            if scan_json_finished['scanners_v2']['scam_adviser'] is None:
+                SA_Result = "Not Scanned"
+            else:
+                SA_Result = scan_json_finished['scanners_v2']['scam_adviser']['status']
+            
+            if scan_json_finished['scanners_v2']['clean_dns'] is None:
+                CD_Result = "Not Scanned"
+            else:
+                CD_Result = scan_json_finished['scanners_v2']['clean_dns']['status']
+
+            if scan_json_finished['scanners_v2']['bfore_ai'] is None:
+                BA_Result = "Not Scanned"
+            else:
+                BA_Result = scan_json_finished['scanners_v2']['bfore_ai']['status']
+
         results_dict = {"scanned_url" : url, 
-            "Crowdstrike_ML" : scan_json['scanners_v2']['crowdstrike_ml']['status'],
-            "MetaDefender" : scan_json['scanners_v2']['metadefender']['status'],
-            "VirusTotal" : scan_json['scanners_v2']['virustotal']['status'],
-            "urlscan_io" : scan_json['scanners_v2']['urlscan_io']['status'],
-            "Scam_Adviser" : scan_json['scanners_v2']['scam_adviser']['status'],
-            "Clean_DNS" : scan_json['scanners_v2']['clean_dns']['status'],
-            "Bfore_AI" : scan_json['scanners_v2']['bfore_ai']['status']
+            "Crowdstrike_ML" : CS_ML_Result,
+            "MetaDefender" : MD_Result,
+            "VirusTotal" : VT_Result,
+            "urlscan_io" : URL_IO_Result,
+            "Scam_Adviser" : SA_Result,
+            "Clean_DNS" : CD_Result,
+            "Bfore_AI" : BA_Result
             }
         results_list.append(results_dict)
 
@@ -65,9 +149,9 @@ def read_search_results(text_file):
 
 #====================================================#
 if __name__ == '__main__':
-    #urls_to_scan = read_search_results('google_search_results_2023_11_13.txt')
-    urls_to_scan = ['https://urlhaus.abuse.ch/url/2733586/']
-    scan_url(api_key, quick_scan_url, urls_to_scan)
+    #Below goes the name of your file that should be in the same project directory
+    urls_to_scan = read_search_results('google_search_results_2023_11_13.txt')
+    scan_url(api_key, quick_scan_url, urls_to_scan, needs_to_finish_url)
     file = open('hybrid_analysis.txt','a')
     json.dump(results_list, file, indent=2)
     file.close()

@@ -13,6 +13,7 @@ results_list = []
 def scan_url (api_key, urls_to_scan, base_api_url, analysis_api_url):
 
     num_potentially_malicious = 0
+    num_potentially_suspicious = 0
     num_safe = 0
     for url in urls_to_scan:
         
@@ -34,8 +35,11 @@ def scan_url (api_key, urls_to_scan, base_api_url, analysis_api_url):
         mal_list = []
         sus_list = []
         if scan_response_json['data']['attributes']['stats']['malicious'] > 0 or scan_response_json['data']['attributes']['stats']['suspicious'] > 0:
-            num_potentially_malicious += 1
             mal_list, sus_list = get_scan_methods(scan_response_json)
+            if len(mal_list) > 0:
+                num_potentially_malicious += 1
+            if len(sus_list) > 0:
+                num_potentially_suspicious += 1
             print(f"Scans found {url} to be bad according to mal_list:{mal_list} and sus_list{sus_list}")
         else:
             num_safe += 1
@@ -55,7 +59,7 @@ def scan_url (api_key, urls_to_scan, base_api_url, analysis_api_url):
         print(results_list)
         time.sleep(60)
 
-    return num_potentially_malicious, num_safe
+    return num_potentially_malicious, num_potentially_suspicious, num_safe
 
 
 def get_scan_methods(json_object):
@@ -114,9 +118,9 @@ if __name__ == '__main__':
     urls_to_scan = read_search_results('bing_US_health_results.txt')
     number_of_urls = len(urls_to_scan)
 
-    num_mal, num_safe = scan_url(apikey, urls_to_scan, base_url, analysis_url)
+    num_mal, num_sus, num_safe = scan_url(apikey, urls_to_scan, base_url, analysis_url)
 
     file = open('bing_health_results.txt','a')
-    file.write(f"Out of {number_of_urls} urls scanned: {num_mal} were found to be malicious, {num_safe} were found to be safe")
+    file.write(f"Out of {number_of_urls} urls scanned: {num_mal} were found to be malicious, {num_sus} were found to be suspicious, {num_safe} were found to be safe")
     json.dump(results_list, file, indent=2)
     file.close()
