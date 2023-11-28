@@ -3,7 +3,6 @@
 
 ---
 - Looks for files with .txt
-- Determine if those files have the words sports, entertainment, politics, world or health
 - Reads in the fetched file and then extracts keywords from those files based on string within quotation marks
 - Iterates through those keywords and passes those keyword to bing_search, google_search functions
 ---
