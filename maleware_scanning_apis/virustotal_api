@@ -19,7 +19,10 @@ def scan_url (api_key, urls_to_scan, base_api_url, analysis_api_url):
         
         #Scan for the url id
         id_response = scan_api(api_key, url, base_api_url)
-        scan_json = json.loads(id_response.text)
+        try:
+            scan_json = json.loads(id_response.text)
+        except json.decoder.JSONDecodeError as e:
+            print(f"Error: {e}. Could not get id for this url: {url}")
         url_id = scan_json['data']['id']
 
 
@@ -115,12 +118,12 @@ def read_search_results(text_file):
 
 #====================================================#
 if __name__ == '__main__':
-    urls_to_scan = read_search_results('bing_US_health_results.txt')
+    urls_to_scan = read_search_results('google_health_11_27.txt')
     number_of_urls = len(urls_to_scan)
 
     num_mal, num_sus, num_safe = scan_url(apikey, urls_to_scan, base_url, analysis_url)
 
-    file = open('bing_health_results.txt','a')
+    file = open('google_health_results_11_27.txt','a')
     file.write(f"Out of {number_of_urls} urls scanned: {num_mal} were found to be malicious, {num_sus} were found to be suspicious, {num_safe} were found to be safe")
     json.dump(results_list, file, indent=2)
     file.close()
