@@ -1,13 +1,13 @@
 # Repository for University of Michigan Dearborn CIS 540 
-# Analysis of malicious link filtering by public search engines on trending topics and news
-# All Relevant Code Relating to Project 2: Trending Topics Weaponization With Alternative Ideas
+## Analysis of malicious link filtering by public search engines on trending topics and news
+### All Relevant Code Relating to Project 2: Trending Topics Weaponization With Alternative Ideas
 
 # Members:
-Constantin Balan
-Alistair Clarke
-Jacob Hodgson
-Hannah Klooster
-Bhanu Singh
+Constantin Balan \n
+Alistair Clarke \n
+Jacob Hodgson \n
+Hannah Klooster \n
+Bhanu Singh \n
 
 # Paper Abstract and Introduction
 In this paper our goals are to understanding attackers' mentality by  analyzing e popular search engines on the internet for their ability to filter malicious websites which attempt to use trending topics and news stories to appear relevant when searched; compare abilities of (2) search engines to filter out suspicious and dangerous links to their users ; compare regional differences - (US as well as Global topics) ; compare categories of trending topics to each other, determining which ones are more prone to adversarial attack i.e. politics, or entertainment, or sports. In addition to this, we were able to complete our stretch goal a): compare multiple link analysis software tools to each other i.e., Virus Total, Hybrid Analysis. 
