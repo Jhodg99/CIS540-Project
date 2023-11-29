@@ -18,6 +18,8 @@ def scan_url(api_key, quickscan_url, urls_to_sca, needs_to_finish_url):
         print(scan_json)
 
         #This is ugly, but oh well
+        #The purpose here is to have the call not error out due to the response not containing values
+        #from every of the scanners below
         if scan_json['scanners_v2']['crowdstrike_ml'] is None:
             CS_ML_Result = "Not Scanned"
         else:

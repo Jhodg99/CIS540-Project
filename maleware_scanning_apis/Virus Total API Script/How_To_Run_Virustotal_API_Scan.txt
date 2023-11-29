@@ -1,0 +1,6 @@
+How to run the virustotal_api.py file:
+
+Step 1: On line 7 of the file, replace the apikey variable with your own. Make sure the key is inside of quotes
+Step 2: Move a .txt file with all of your links into the same directory as the virustotal_api.py file
+Step 3: On line 121 of the file, replace the parameter inside of read_search_results() with the name of your .txt you added in the last step
+Step 4 (Optional): On line 126, replace the parameter inside of open() with whatever file name you want. Example: virustotal_myresults.txt 
